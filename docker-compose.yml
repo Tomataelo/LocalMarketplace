@@ -2,6 +2,7 @@ version: '3.9'
 
 services:
     php:
+        container_name: advanced_project_php
         build:
             context: .
             dockerfile: docker/php/Dockerfile
@@ -11,6 +12,7 @@ services:
             - db
 
     nginx:
+        container_name: advanced_project_nginx
         image: nginx:stable-alpine
         volumes:
             - .:/var/www/html
@@ -21,6 +23,7 @@ services:
             - php
 
     db:
+        container_name: advanced_project_db
         image: postgres:15-alpine
         environment:
             POSTGRES_DB: app
@@ -32,11 +35,13 @@ services:
             - pgdata:/var/lib/postgresql/data
 
     redis:
+        container_name: advanced_project_redis
         image: redis:alpine
         ports:
             - "6379:6379"
 
     rabbitmq:
+        container_name: advanced_project_rabbitmq
         image: rabbitmq:3-management
         ports:
             - "15672:15672" # UI
