@@ -122,11 +122,9 @@ class User
     }
 
     #[ORM\PrePersist]
-    public function setCreatedAt(\DateTimeImmutable $created_at): static
+    public function setCreatedAt(): void
     {
-        $this->created_at = $created_at;
-
-        return $this;
+        $this->created_at = new \DateTimeImmutable();
     }
 
     public function getUpdatedAt(): ?\DateTimeImmutable
@@ -136,10 +134,8 @@ class User
 
     #[ORM\PreUpdate]
     #[ORM\PrePersist]
-    public function setUpdatedAt(\DateTimeImmutable $updated_at): static
+    public function setUpdatedAt(): void
     {
-        $this->updated_at = $updated_at;
-
-        return $this;
+        $this->updated_at = new \DateTimeImmutable();
     }
 }
