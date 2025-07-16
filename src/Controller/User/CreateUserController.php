@@ -34,7 +34,8 @@ final class CreateUserController extends AbstractController
 
         } catch (\InvalidArgumentException $e) {
             $logger->error($e->getMessage());
-            return new JsonResponse($e->getMessage(), 409);
+            $errorMessages = json_decode($e->getMessage(), true);
+            return new JsonResponse($errorMessages, 409);
         }
 
         return new JsonResponse($userDto, 201);

@@ -4,6 +4,8 @@ namespace App\Dto\User;
 
 use Symfony\Component\Validator\Constraints as Assert;
 
+// to DTO służy tylko do create i get
+
 readonly class UserDto
 {
     public function __construct(
