@@ -29,11 +29,11 @@ final class GetUserController extends AbstractController
 
         } catch (NotFoundHttpException $e) {
             $logger->error($e->getMessage());
-            return new JsonResponse('User with id: ' . $userId . ' not found', 404);
+            return new JsonResponse(["error" => $e->getMessage()], 404);
 
         } catch (ExceptionInterface $e) {
-            $logger->error($e->getMessage());
-            return new JsonResponse($e->getMessage(), 500);
+            $logger->error('Serialization error: ' . $e->getMessage());
+            return new JsonResponse(['error' => 'Invalid serialization.'], 400);
         }
 
         return new JsonResponse($serializedUser, 200, [], true);

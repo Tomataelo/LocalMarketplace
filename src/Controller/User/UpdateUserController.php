@@ -4,6 +4,7 @@ namespace App\Controller\User;
 
 use App\Dto\User\UpdateUserDto;
 use App\Dto\User\UserDto;
+use App\Exception\ValidationException;
 use App\Service\User\UpdateUserService;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -13,7 +14,7 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\SerializerInterface;
 
-#[Route('/api/user/{userId}', name: 'deleteUser', methods: ['PUT'])]
+#[Route('/api/user/{userId}', name: 'updateUser', methods: ['PUT'])]
 class UpdateUserController extends AbstractController
 {
     public function __invoke(
@@ -24,7 +25,6 @@ class UpdateUserController extends AbstractController
         UpdateUserService $updateUserService
     ): JsonResponse
     {
-
         $userDto = $serializer->deserialize($request->getContent(), UpdateUserDto::class, 'json');
 
         try {
@@ -33,13 +33,13 @@ class UpdateUserController extends AbstractController
 
         } catch (NotFoundHttpException $e) {
             $logger->error($e->getMessage());
-            return new JsonResponse('User with id: ' . $userId . ' not found', 404);
-        } catch (\InvalidArgumentException $e) {
+            return new JsonResponse(["error" => 'User with id: ' . $userId . ' not found'], 404);
+
+        } catch (ValidationException $e) {
             $logger->error($e->getMessage());
-            $errorMessages = json_decode($e->getMessage(), true);
-            return new JsonResponse($errorMessages, 409);
+            return new JsonResponse(json_decode($e->getMessage(), true), 409);
         }
 
-        return new JsonResponse(true);
+        return new JsonResponse(["success" => true]);
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Controller\User;
 
+use App\Exception\ValidationException;
 use App\Dto\User\UserDto;
 use App\Service\User\CreateUserService;
 use Psr\Log\LoggerInterface;
@@ -28,16 +29,21 @@ final class CreateUserController extends AbstractController
 
             $userService->createUser($userDto);
 
+            $serializedUser = $serializer->serialize($userDto, 'json');
+
         } catch (ExceptionInterface $e) {
+            $logger->error('Deserialization error: ' . $e->getMessage());
+            return new JsonResponse(['error' => 'Invalid input. Please ensure all required fields are entered correctly.'], 400);
+
+        } catch (ValidationException $e) {
             $logger->error($e->getMessage());
-            return new JsonResponse($e->getMessage(), 400);
+            return new JsonResponse(["errors" => json_decode($e->getMessage() , true)], 422);
 
         } catch (\InvalidArgumentException $e) {
             $logger->error($e->getMessage());
-            $errorMessages = json_decode($e->getMessage(), true);
-            return new JsonResponse($errorMessages, 409);
+            return new JsonResponse(['error' => $e->getMessage()], 409);
         }
 
-        return new JsonResponse($userDto, 201);
+        return new JsonResponse($serializedUser, 201, [], true);
     }
 }

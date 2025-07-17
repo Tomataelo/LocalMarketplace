@@ -21,14 +21,13 @@ final class RemoveUserController extends AbstractController
         try {
 
             $removeUserService->removeUser($userId);
-            
-        } catch (NotFoundHttpException $e) {
 
+        } catch (NotFoundHttpException $e) {
             $logger->info($e->getMessage());
             return new JsonResponse([json_decode($e->getMessage())]);
         }
 
-        return new JsonResponse(true);
+        return new JsonResponse(["success" => true]);
     }
 }
 

@@ -5,7 +5,10 @@ namespace App\Service\User;
 use App\Dto\User\UpdateUserDto;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
+
+use App\Exception\ValidationException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 readonly class UpdateUserService
@@ -18,10 +21,8 @@ readonly class UpdateUserService
 
     public function updateUser(int $userId, UpdateUserDto $userDto): bool
     {
-        $userEntity = $this->userRepository->find($userId);
-        if (!$userEntity) {
-            throw new NotFoundHttpException("User not found");
-        }
+        $userEntity = $this->userRepository->find($userId)
+            ?? throw new NotFoundHttpException('User with id: ' . $userId . ' not found');
 
         $errors = $this->validator->validate($userDto);
 
@@ -34,7 +35,7 @@ readonly class UpdateUserService
                 ];
             }
 
-            throw new \InvalidArgumentException(json_encode($errorMessages));
+            throw new ValidationException(json_encode($errorMessages));
         }
 
         if (!is_null($userDto->getEmail()) && $userDto->getEmail() !== $userEntity->getEmail()) {

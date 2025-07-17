@@ -7,6 +7,8 @@ use App\Entity\User;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
+use App\Exception\ValidationException;
+
 
 readonly class CreateUserService
 {
@@ -22,6 +24,7 @@ readonly class CreateUserService
 
         if (count($errors) > 0) {
             $errorMessages = [];
+
             foreach ($errors as $error) {
                 $errorMessages[] = [
                     'field' => $error->getPropertyPath(),
@@ -29,13 +32,14 @@ readonly class CreateUserService
                 ];
             }
 
-            throw new \InvalidArgumentException(json_encode($errorMessages));
+            throw new ValidationException(json_encode($errorMessages));
         }
 
         $isUserExist = $this->userRepository->findBy(['email' => $userDto->getEmail()]);
         if ($isUserExist) {
-            throw new \InvalidArgumentException('User already exist');
+            throw new \InvalidArgumentException('User with this email already exist');
         }
+
 
         $user = new User();
         $user->setEmail($userDto->getEmail());

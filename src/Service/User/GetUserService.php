@@ -14,11 +14,8 @@ readonly class GetUserService
 
     public function getUser(int $userId): UserDto
     {
-        $userEntity = $this->userRepository->find($userId);
-
-        if (!$userEntity) {
-            throw new NotFoundHttpException('User not found.');
-        }
+        $userEntity = $this->userRepository->find($userId)
+            ?? throw new NotFoundHttpException('User with id: ' . $userId . ' not found');
 
         return new UserDto(
             $userEntity->getEmail(),
