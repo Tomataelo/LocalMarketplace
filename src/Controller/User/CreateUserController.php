@@ -3,7 +3,7 @@
 namespace App\Controller\User;
 
 use App\Exception\ValidationException;
-use App\Dto\User\UserDto;
+use App\Dto\User\CreateUserDto;
 use App\Service\User\CreateUserService;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -25,11 +25,11 @@ final class CreateUserController extends AbstractController
     {
         try {
 
-            $userDto = $serializer->deserialize($request->getContent(), UserDto::class, 'json');
+            $createUserDto = $serializer->deserialize($request->getContent(), CreateUserDto::class, 'json');
 
-            $userService->createUser($userDto);
+            $userService->createUser($createUserDto);
 
-            $serializedUser = $serializer->serialize($userDto, 'json');
+            $serializedUser = $serializer->serialize($createUserDto, 'json');
 
         } catch (ExceptionInterface $e) {
             $logger->error('Deserialization error: ' . $e->getMessage());

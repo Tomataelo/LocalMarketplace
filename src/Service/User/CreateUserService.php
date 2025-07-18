@@ -2,7 +2,7 @@
 
 namespace App\Service\User;
 
-use App\Dto\User\UserDto;
+use App\Dto\User\CreateUserDto;
 use App\Entity\User;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -18,9 +18,9 @@ readonly class CreateUserService
         private ValidatorInterface     $validator
     ){}
 
-    public function createUser(UserDto $userDto): void
+    public function createUser(CreateUserDto $createUserDto): void
     {
-        $errors = $this->validator->validate($userDto);
+        $errors = $this->validator->validate($createUserDto);
 
         if (count($errors) > 0) {
             $errorMessages = [];
@@ -35,19 +35,19 @@ readonly class CreateUserService
             throw new ValidationException(json_encode($errorMessages));
         }
 
-        $isUserExist = $this->userRepository->findBy(['email' => $userDto->getEmail()]);
+        $isUserExist = $this->userRepository->findBy(['email' => $createUserDto->getEmail()]);
         if ($isUserExist) {
             throw new \InvalidArgumentException('User with this email already exist');
         }
 
 
         $user = new User();
-        $user->setEmail($userDto->getEmail());
-        $user->setPassword($userDto->getPassword());
-        $user->setFirstName($userDto->getFirstName());
-        $user->setLastName($userDto->getLastName());
-        $user->setRole($userDto->getRole());
-        $user->setPhoneNumber($userDto->getPhoneNumber());
+        $user->setEmail($createUserDto->getEmail());
+        $user->setPassword($createUserDto->getPassword());
+        $user->setFirstName($createUserDto->getFirstName());
+        $user->setLastName($createUserDto->getLastName());
+        $user->setRole($createUserDto->getRole());
+        $user->setPhoneNumber($createUserDto->getPhoneNumber());
 
         $this->entityManager->persist($user);
         $this->entityManager->flush();

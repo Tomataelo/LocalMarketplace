@@ -6,7 +6,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 // to DTO służy tylko do create i get
 
-readonly class UserDto
+readonly class CreateUserDto
 {
     public function __construct(
 
@@ -25,6 +25,7 @@ readonly class UserDto
         private string $last_name,
 
         #[Assert\NotBlank]
+        #[Assert\Choice(choices: ['client', 'contractor', 'admin'], message: 'Choose a valid role.')]
         private string $role,
 
         #[Assert\NotBlank]

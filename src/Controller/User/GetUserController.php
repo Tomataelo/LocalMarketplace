@@ -11,10 +11,10 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Serializer\Exception\ExceptionInterface;
 use Symfony\Component\Serializer\SerializerInterface;
 
-#[Route('/api/user/{userId}', name: 'getUser', methods: ['GET'])]
 final class GetUserController extends AbstractController
 {
-    public function __invoke(
+    #[Route('/api/user/{userId}', name: 'getUser', methods: ['GET'])]
+    public function getOneUser(
         int $userId,
         SerializerInterface $serializer,
         LoggerInterface $logger,
@@ -37,5 +37,31 @@ final class GetUserController extends AbstractController
         }
 
         return new JsonResponse($serializedUser, 200, [], true);
+    }
+
+
+    #[Route('/api/users', name: 'getUsers', methods: ['GET'])]
+    public function getUsers(
+        SerializerInterface $serializer,
+        LoggerInterface $logger,
+        GetUserService $getUserService
+    ): JsonResponse
+    {
+        try {
+
+            $arrOfUsers = $getUserService->getAllUsers();
+
+            $serializedUsers = $serializer->serialize($arrOfUsers, 'json');
+
+        } catch (NotFoundHttpException $e) {
+            $logger->error($e->getMessage());
+            return new JsonResponse(["error" => $e->getMessage()], 404);
+
+        } catch (ExceptionInterface $e) {
+            $logger->error('Serialization error: ' . $e->getMessage());
+            return new JsonResponse(['error' => 'Invalid serialization.'], 400);
+        }
+
+        return new JsonResponse($serializedUsers, 200, [], true);
     }
 }

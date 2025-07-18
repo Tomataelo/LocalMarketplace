@@ -3,7 +3,6 @@
 namespace App\Controller\User;
 
 use App\Dto\User\UpdateUserDto;
-use App\Dto\User\UserDto;
 use App\Exception\ValidationException;
 use App\Service\User\UpdateUserService;
 use Psr\Log\LoggerInterface;
@@ -12,6 +11,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Serializer\Exception\ExceptionInterface;
 use Symfony\Component\Serializer\SerializerInterface;
 
 #[Route('/api/user/{userId}', name: 'updateUser', methods: ['PUT'])]
@@ -25,9 +25,9 @@ class UpdateUserController extends AbstractController
         UpdateUserService $updateUserService
     ): JsonResponse
     {
-        $userDto = $serializer->deserialize($request->getContent(), UpdateUserDto::class, 'json');
-
         try {
+
+            $userDto = $serializer->deserialize($request->getContent(), UpdateUserDto::class, 'json');
 
             $updateUserService->updateUser($userId, $userDto);
 
@@ -38,6 +38,10 @@ class UpdateUserController extends AbstractController
         } catch (ValidationException $e) {
             $logger->error($e->getMessage());
             return new JsonResponse(json_decode($e->getMessage(), true), 409);
+
+        } catch (ExceptionInterface $e) {
+            $logger->error('Deserialization error: ' . $e->getMessage());
+            return new JsonResponse(['error' => 'Invalid input. Please ensure all required fields are entered correctly.'], 400);
         }
 
         return new JsonResponse(["success" => true]);
