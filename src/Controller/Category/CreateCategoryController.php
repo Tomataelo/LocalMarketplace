@@ -1,9 +1,8 @@
 <?php
 
-namespace App\Controller\ServiceCategory;
+namespace App\Controller\Category;
 
-use App\Dto\ServiceCategory\ServiceCategoryDto;
-
+use App\Dto\Category\CategoryDto;
 use App\Exception\ValidationException;
 use App\Service\Category\CreateCategoryService;
 use Psr\Log\LoggerInterface;
@@ -14,8 +13,8 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\Exception\ExceptionInterface;
 use Symfony\Component\Serializer\SerializerInterface;
 
-#[Route('/api/category', name: 'createServiceCategory', methods: ['POST'])]
-final class CreateServiceCategoryController extends AbstractController
+#[Route('/api/category', name: 'createCategory', methods: ['POST'])]
+final class CreateCategoryController extends AbstractController
 {
     public function __invoke(
         Request                      $request,
@@ -26,11 +25,11 @@ final class CreateServiceCategoryController extends AbstractController
     {
         try {
 
-            $serviceCategoryDto = $serializer->deserialize($request->getContent(), ServiceCategoryDto::class, 'json');
+            $categoryDto = $serializer->deserialize($request->getContent(), CategoryDto::class, 'json');
 
-            $createCategoryService($serviceCategoryDto);
+            $createCategoryService($categoryDto);
 
-            $serializedServiceCategory = $serializer->serialize($serviceCategoryDto, 'json');
+            $serializedCategory = $serializer->serialize($categoryDto, 'json');
 
         } catch (ExceptionInterface $e) {
             $logger->error('Deserialization error: ' . $e->getMessage());
@@ -46,6 +45,6 @@ final class CreateServiceCategoryController extends AbstractController
         }
 
 
-        return new JsonResponse($serializedServiceCategory, 201, [], true);
+        return new JsonResponse($serializedCategory, 201, [], true);
     }
 }

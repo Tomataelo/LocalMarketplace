@@ -4,7 +4,6 @@ namespace App\Dto\User;
 
 use Symfony\Component\Validator\Constraints as Assert;
 
-// to DTO służy tylko do create i get
 
 readonly class CreateUserDto
 {
@@ -32,6 +31,17 @@ readonly class CreateUserDto
         #[Assert\Regex("/^\+?[0-9]{1,4}?[-. ]?(\([0-9]{1,3}?\))?[-. ]?[0-9]+[-. ]?[0-9]+[-. ]?[0-9]+$/")]
         private string $phone_number,
 
+        #[Assert\NotBlank]
+        private string $city,
+
+        #[Assert\NotBlank]
+        private string $address,
+
+        #[Assert\NotBlank]
+        private string $postal_code,
+
+        #[Assert\NotBlank]
+        private string $province,
     ) {}
 
     public function getEmail(): string
@@ -63,4 +73,25 @@ readonly class CreateUserDto
     {
         return $this->phone_number;
     }
+
+    public function getCity(): string
+    {
+        return $this->city;
+    }
+
+    public function getAddress(): string
+    {
+        return $this->address;
+    }
+
+    public function getPostalCode(): string
+    {
+        return $this->postal_code;
+    }
+
+    public function getProvince(): string
+    {
+        return $this->province;
+    }
+
 }

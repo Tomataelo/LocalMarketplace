@@ -20,7 +20,7 @@ final class CreateUserController extends AbstractController
         Request $request,
         SerializerInterface $serializer,
         LoggerInterface $logger,
-        CreateUserService $userService,
+        CreateUserService $userService
     ): JsonResponse
     {
         try {

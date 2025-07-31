@@ -39,6 +39,18 @@ class User
     #[ORM\Column]
     private ?\DateTimeImmutable $updated_at = null;
 
+    #[ORM\Column(length: 255)]
+    private ?string $city = null;
+
+    #[ORM\Column(length: 255)]
+    private ?string $address = null;
+
+    #[ORM\Column(length: 15)]
+    private ?string $postal_code = null;
+
+    #[ORM\Column(length: 100)]
+    private ?string $province = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -137,5 +149,53 @@ class User
     public function setUpdatedAt(): void
     {
         $this->updated_at = new \DateTimeImmutable();
+    }
+
+    public function getCity(): ?string
+    {
+        return $this->city;
+    }
+
+    public function setCity(string $city): static
+    {
+        $this->city = $city;
+
+        return $this;
+    }
+
+    public function getAddress(): ?string
+    {
+        return $this->address;
+    }
+
+    public function setAddress(string $address): static
+    {
+        $this->address = $address;
+
+        return $this;
+    }
+
+    public function getPostalCode(): ?string
+    {
+        return $this->postal_code;
+    }
+
+    public function setPostalCode(string $postal_code): static
+    {
+        $this->postal_code = $postal_code;
+
+        return $this;
+    }
+
+    public function getProvince(): ?string
+    {
+        return $this->province;
+    }
+
+    public function setProvince(string $province): static
+    {
+        $this->province = $province;
+
+        return $this;
     }
 }

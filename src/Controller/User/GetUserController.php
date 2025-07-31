@@ -13,7 +13,7 @@ use Symfony\Component\Serializer\SerializerInterface;
 
 final class GetUserController extends AbstractController
 {
-    #[Route('/api/user/{userId}', name: 'getUser', methods: ['GET'])]
+    #[Route('/api/user/{userId}', name: 'getOneUser', methods: ['GET'])]
     public function getOneUser(
         int $userId,
         SerializerInterface $serializer,
@@ -40,8 +40,8 @@ final class GetUserController extends AbstractController
     }
 
 
-    #[Route('/api/users', name: 'getUsers', methods: ['GET'])]
-    public function getUsers(
+    #[Route('/api/users', name: 'getAllUsers', methods: ['GET'])]
+    public function getAllUsers(
         SerializerInterface $serializer,
         LoggerInterface $logger,
         GetUserService $getUserService

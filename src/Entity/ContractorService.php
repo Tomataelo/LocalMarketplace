@@ -7,6 +7,7 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: ContractorServiceRepository::class)]
+#[ORM\Index(name: "idx_contractor_id", columns: ["contractor_id"])]
 class ContractorService
 {
     #[ORM\Id]
@@ -14,11 +15,13 @@ class ContractorService
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column]
-    private ?int $contractor_id = null;
+    #[ORM\ManyToOne(targetEntity: User::class)]
+    #[ORM\JoinColumn(name: "contractor_id", referencedColumnName: "id")]
+    private ?User $contractor = null;
 
-    #[ORM\Column]
-    private ?int $category_id = null;
+    #[ORM\ManyToOne(targetEntity: Category::class)]
+    #[ORM\JoinColumn(name: "category_id", referencedColumnName: "id")]
+    private ?Category $category = null;
 
     #[ORM\Column(length: 255)]
     private ?string $title = null;
@@ -43,26 +46,26 @@ class ContractorService
         return $this->id;
     }
 
-    public function getContractorId(): ?int
+    public function getContractor(): User
     {
-        return $this->contractor_id;
+        return $this->contractor;
     }
 
-    public function setContractorId(int $contractor_id): static
+    public function setContractor(User $contractor): static
     {
-        $this->contractor_id = $contractor_id;
+        $this->contractor = $contractor;
 
         return $this;
     }
 
-    public function getCategoryId(): ?int
+    public function getCategory(): Category
     {
-        return $this->category_id;
+        return $this->category;
     }
 
-    public function setCategoryId(int $category_id): static
+    public function setCategory(Category $category): static
     {
-        $this->category_id = $category_id;
+        $this->category = $category;
 
         return $this;
     }

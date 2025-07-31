@@ -2,14 +2,14 @@
 
 namespace App\Service\Category;
 
-use App\Dto\ServiceCategory\ServiceCategoryDto;
+use App\Dto\Category\CategoryDto;
 use App\Entity\Category;
 use App\Exception\ValidationException;
 use App\Repository\CategoryRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
-readonly class CreateServiceCategoryService
+readonly class CreateCategoryService
 {
 
     public function __construct(
@@ -18,7 +18,7 @@ readonly class CreateServiceCategoryService
         private ValidatorInterface        $validator
     ){}
 
-    public function __invoke(ServiceCategoryDto $serviceCategoryDto): ServiceCategoryDto
+    public function __invoke(CategoryDto $serviceCategoryDto): CategoryDto
     {
         $errors = $this->validator->validate($serviceCategoryDto);
 

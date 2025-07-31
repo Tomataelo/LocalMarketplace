@@ -40,7 +40,6 @@ readonly class CreateUserService
             throw new \InvalidArgumentException('User with this email already exist');
         }
 
-
         $user = new User();
         $user->setEmail($createUserDto->getEmail());
         $user->setPassword($createUserDto->getPassword());
@@ -48,6 +47,10 @@ readonly class CreateUserService
         $user->setLastName($createUserDto->getLastName());
         $user->setRole($createUserDto->getRole());
         $user->setPhoneNumber($createUserDto->getPhoneNumber());
+        $user->setCity($createUserDto->getCity());
+        $user->setAddress($createUserDto->getAddress());
+        $user->setPostalCode($createUserDto->getPostalCode());
+        $user->setProvince($createUserDto->getProvince());
 
         $this->entityManager->persist($user);
         $this->entityManager->flush();
