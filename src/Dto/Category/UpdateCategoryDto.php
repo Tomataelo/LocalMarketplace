@@ -2,7 +2,7 @@
 
 namespace App\Dto\Category;
 
-class CategoryDto
+class UpdateCategoryDto
 {
 
 }
