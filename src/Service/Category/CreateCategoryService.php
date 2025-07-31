@@ -37,12 +37,12 @@ readonly class CreateCategoryService
 
         $isServiceCategoryNameExists = $this->categoryRepository->findOneBy(['name' => $serviceCategoryDto->getName()]);
         if ($isServiceCategoryNameExists) {
-            throw new \InvalidArgumentException('Service category with this name already exist');
+            throw new \InvalidArgumentException('Category with this name already exist');
         }
 
         $isServiceCategorySlugExists = $this->categoryRepository->findOneBy(['slug' => $serviceCategoryDto->getSlug()]);
         if ($isServiceCategorySlugExists) {
-            throw new \InvalidArgumentException('Service category with this slug already exist');
+            throw new \InvalidArgumentException('Category with this slug already exist');
         }
 
 

@@ -2,37 +2,30 @@
 
 namespace App\Controller\Category;
 
-use Psr\Log\LoggerInterface;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use App\Controller\BaseApiController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\Exception\ExceptionInterface;
-use Symfony\Component\Serializer\SerializerInterface;
 use App\Service\Category\GetCategoryService;
 
-class GetCategoryController extends AbstractController
+class GetCategoryController extends BaseApiController
 {
     #[Route('/api/category/{categoryId}', name: 'getOneCategory', methods: ['GET'])]
-    public function getOneCategory(
-        int $categoryId,
-        SerializerInterface $serializer,
-        LoggerInterface $logger,
-        GetCategoryService $getCategoryService
-    ): JsonResponse
+    public function getOneCategory(int $categoryId, GetCategoryService $getCategoryService): JsonResponse
     {
         try {
 
             $categoryDto = $getCategoryService->getCategory($categoryId);
 
-            $serializedCategory = $serializer->serialize($categoryDto, 'json');
+            $serializedCategory = $this->serializer->serialize($categoryDto, 'json');
 
         } catch (NotFoundHttpException $e) {
-            $logger->error($e->getMessage());
+            $this->logger->error($e->getMessage());
             return new JsonResponse(["error" => $e->getMessage()], 404);
 
         } catch (ExceptionInterface $e) {
-            $logger->error('Serialization error: ' . $e->getMessage());
+            $this->logger->error('Serialization error: ' . $e->getMessage());
             return new JsonResponse(['error' => 'Invalid serialization.'], 400);
         }
 
@@ -41,24 +34,20 @@ class GetCategoryController extends AbstractController
 
 
     #[Route('/api/categories', name: 'getAllCategories', methods: ['GET'])]
-    public function getAllCategories(
-        SerializerInterface $serializer,
-        LoggerInterface $logger,
-        GetCategoryService $getCategoryService
-    ): JsonResponse
+    public function getAllCategories(GetCategoryService $getCategoryService): JsonResponse
     {
         try {
 
             $categoriesDto = $getCategoryService->getAllCategories();
 
-            $serializedCategories = $serializer->serialize($categoriesDto, 'json');
+            $serializedCategories = $this->serializer->serialize($categoriesDto, 'json');
 
         } catch (NotFoundHttpException $e) {
-            $logger->error($e->getMessage());
+            $this->logger->error($e->getMessage());
             return new JsonResponse(["error" => $e->getMessage()], 404);
 
         } catch (ExceptionInterface $e) {
-            $logger->error('Serialization error: ' . $e->getMessage());
+            $this->logger->error('Serialization error: ' . $e->getMessage());
             return new JsonResponse(['error' => 'Invalid serialization.'], 400);
         }
 

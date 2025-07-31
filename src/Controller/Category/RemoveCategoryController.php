@@ -2,28 +2,23 @@
 
 namespace App\Controller\Category;
 
+use App\Controller\BaseApiController;
 use App\Service\Category\RemoveCategoryService;
-use Psr\Log\LoggerInterface;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 
 #[Route('/api/category/{categoryId}', name: 'removeCategory', methods: ['DELETE'])]
-class RemoveCategoryController extends AbstractController
+class RemoveCategoryController extends BaseApiController
 {
-    public function __invoke(
-        int $categoryId,
-        LoggerInterface $logger,
-        RemoveCategoryService $removeCategoryService
-    ): JsonResponse
+    public function __invoke(int $categoryId, RemoveCategoryService $removeCategoryService): JsonResponse
     {
         try {
 
             $removeCategoryService($categoryId);
 
         } catch (NotFoundHttpException $e) {
-            $logger->warning($e->getMessage());
+            $this->logger->warning($e->getMessage());
             return new JsonResponse([$e->getMessage()], 404);
         }
 

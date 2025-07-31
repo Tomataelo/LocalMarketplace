@@ -19,7 +19,7 @@ readonly class UpdateCategoryService
     public function __invoke(int $categoryId, UpdateCategoryDto $updateCategoryDto)
     {
         $categoryEntity = $this->categoryRepository->find($categoryId)
-            ?? throw new NotFoundHttpException("Service Category with id: ". $categoryId ." Not Found");
+            ?? throw new NotFoundHttpException("Category with id: ". $categoryId ." Not Found");
 
         if (!is_null($updateCategoryDto->getName()) && $updateCategoryDto->getName() !== $categoryEntity->getName()) {
             $categoryEntity->setName($updateCategoryDto->getName());

@@ -16,7 +16,7 @@ readonly class RemoveCategoryService
     public function __invoke(int $categoryId): void
     {
         $categoryEntity = $this->categoryRepository->find($categoryId)
-            ?? throw new NotFoundHttpException('User with id: ' . $categoryId . ' not found');
+            ?? throw new NotFoundHttpException('Category with id: ' . $categoryId . ' not found');
 
         $this->entityManager->remove($categoryEntity);
         $this->entityManager->flush();

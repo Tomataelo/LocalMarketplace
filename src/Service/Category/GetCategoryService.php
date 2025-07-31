@@ -15,7 +15,7 @@ readonly class GetCategoryService
     public function getCategory(int $categoryId): CategoryDto
     {
         $serviceCategoryEntity = $this->categoryRepository->find($categoryId)
-            ?? throw new NotFoundHttpException('Service Category with id: ' . $categoryId . ' not found');
+            ?? throw new NotFoundHttpException('Category with id: ' . $categoryId . ' not found');
 
         return new CategoryDto(
             $serviceCategoryEntity->getName(),
