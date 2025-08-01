@@ -3,6 +3,7 @@
 namespace App\Service\Category;
 
 use App\Dto\Category\CategoryDto;
+use App\Entity\Category;
 use App\Repository\CategoryRepository;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
@@ -12,14 +13,18 @@ readonly class GetCategoryService
         private CategoryRepository $categoryRepository
     ) {}
 
-    public function getCategory(int $categoryId): CategoryDto
+    public function getCategory(int $categoryId, $returnEntity = false): CategoryDto|Category
     {
-        $serviceCategoryEntity = $this->categoryRepository->find($categoryId)
+        $categoryEntity = $this->categoryRepository->find($categoryId)
             ?? throw new NotFoundHttpException('Category with id: ' . $categoryId . ' not found');
 
+        if ($returnEntity) {
+            return $categoryEntity;
+        }
+
         return new CategoryDto(
-            $serviceCategoryEntity->getName(),
-            $serviceCategoryEntity->getSlug()
+            $categoryEntity->getName(),
+            $categoryEntity->getSlug()
         );
     }
 

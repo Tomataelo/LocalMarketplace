@@ -40,8 +40,9 @@ class CustomerOrder
     #[ORM\Column(length: 15)]
     private ?string $postal_code = null;
 
-    #[ORM\Column(length: 100)]
-    private ?string $province = null;
+    #[ORM\ManyToOne(targetEntity: Province::class)]
+    #[ORM\JoinColumn(name: "province_id", referencedColumnName: "id")]
+    private ?Province $province = null;
 
     public function getId(): ?int
     {
@@ -144,12 +145,12 @@ class CustomerOrder
         return $this;
     }
 
-    public function getProvince(): ?string
+    public function getProvince(): ?Province
     {
         return $this->province;
     }
 
-    public function setProvince(string $province): static
+    public function setProvince(Province $province): static
     {
         $this->province = $province;
 
